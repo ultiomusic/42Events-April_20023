@@ -12,7 +12,7 @@ namespace	SendMail
 		static string password = "MotDePasseQualitatif";
 		static string emailToAdress = "le.greg01900@gmail.com";
 		static string subject = "test";
-		static string body = "Bonjour bonsoir je suis content que cela fonctionne :)";
+		static string body = "Hello good evening I'm glad it works :)";
 		static void Main(string[] args)
 		{
 			SendEmail();
