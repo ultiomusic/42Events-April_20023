@@ -6,79 +6,87 @@
 /*   By: beeligul <beeligul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 15:48:30 by beeligul          #+#    #+#             */
-/*   Updated: 2023/04/02 15:48:31 by beeligul         ###   ########.fr       */
+/*   Updated: 2023/04/03 21:44:00 by beeligul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_max_len(char	*str)
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <stdio.h>
+
+int next_word(char *sentence, int *start, int *end)
 {
-	int	i;
-	int	max_len;
-	int	temp_len;
-	
-	i = 0;
-        max_len = 0;
-        temp_len = 0;
-        while (str[i])
-        {
-                temp_len = 0;
-                while (str[i] != ' ' && str[i])
-                {
-                        temp_len++;
-                        i++;
-                }
-                if (temp_len > max_len)
-                        max_len = temp_len;
-                if (str[i] == ' ' && str[i])
-                        i++;
-        }
-	return (max_len);
+    int i = *start;
+    while (sentence[i] != '\0' && isspace(sentence[i]))
+        i++;
+    *start = i;
+    if (sentence[i] == '\0')
+        return (0);
+    while (sentence[i] != '\0' && !isspace(sentence[i]))
+        i++;
+    *end = i;
+    return (1);
 }
 
-int	main(int argc, char **argv)
-{
-	int 	i;
-	int	max_len;
-	int	temp_len;
+int get_longest_word(char *sentence) {
+    int candidate = 0;
+    int start = 0;
+    int end = 0;
+    while (next_word(sentence, &start, &end)) {
+        if (end - start > candidate)
+            candidate = end - start;
+        start = end;
+    }
+    return (candidate);
+}
 
-	if (argc != 2)
-		return (0);
-	max_len = ft_max_len(argv[1]);
-	i = 0;
-	while (i < max_len + 4)
-	{
-		printf("*");
-		i++;
-	}
-	printf("\n");
-	i = 0;
-	while (argv[1][i])
-	{
-		temp_len = 0;
-		if (argv[1][i] == ' ')
-			i++;
-		if (argv[1][i] != ' ' && argv[1][i])
-		{
-			printf("* ");
-			while (argv[1][i] != ' ' && argv[1][i])
-			{
-				printf("%c", argv[1][i]);
-				i++;
-				temp_len++;
-			}
-			while (temp_len < max_len - 1)
-			{
-				printf(" ");
-				temp_len++;
-			}
-			printf(" *\n");
-		}
-	}
-	i = 0;
-	while (i < max_len + 4)
-	{
-		printf("*");
-		i++;
-	}
-	printf("\n");
+void fancy_print_words(char *sentence) {
+    int longest = get_longest_word(sentence);
+    if (longest == 0)
+    {
+        puts("No words to frame... :(");
+        return ;
+    }
+    int start = 0;
+    int end = 0;
+    for (int i = 0; i < longest + 4; i++)
+        printf("*");
+    printf("\n");
+    while (next_word(sentence, &start, &end)) {
+        printf("* %.*s", end - start, sentence + start);
+        int padding = longest - (end - start);
+        for (int i = 0; i < padding + 1; i++)
+            printf(" ");
+        printf("*\n");
+        start = end;
+    }
+    for (int i = 0; i < longest + 4; i++)
+        printf("*");
+    printf("\n");
+}
+
+int main(int argc, char **argv) {
+    char *sentence = NULL;
+    int word_index = 0;
+    int size = 0;
+    argc--;
+    argv++;
+    while (argv[word_index] != NULL)
+    {
+        size += strlen(argv[word_index]);
+        word_index++;
+    }
+    sentence = (char *) malloc(sizeof(char) * (size + word_index + 1));
+    if (sentence == NULL)
+        return (1);
+    bzero(sentence, word_index + 1);
+    word_index = 0;
+    while (argv[word_index] != NULL) {
+        strcat(sentence, argv[word_index]);
+        strcat(sentence, " ");
+        word_index++;
+    }
+    fancy_print_words(sentence);
+    free(sentence);
 }

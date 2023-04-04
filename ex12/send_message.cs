@@ -5,12 +5,12 @@ namespace	SendMail
 {
 	class Program
 	{
-		static string smtpAdress = "smtp.gmail.com";
+		static string smtpAdress = "smtp.office365.com";
 		static int portNumber = 587;
 		static bool enableSSL = true;
-		static string emailFromAddress = "april.2023.mail@gmail.com";
-		static string password = "MotDePasseQualitatif";
-		static string emailToAdress = "le.greg01900@gmail.com";
+		static string emailFromAddress = "adantas.dev.test@hotmail.com";
+		static string password = "Senhab0b4123";
+		static string emailToAdress = "ninjabicakci@gmail.com";
 		static string subject = "test";
 		static string body = "Hello good evening I'm glad it works :)";
 		static void Main(string[] args)
